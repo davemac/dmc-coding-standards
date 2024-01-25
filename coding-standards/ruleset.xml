@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="DMC" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
+<description>PHP 8.0+ coding standards for DMC Web WordPress projects.</description>
+
+	<!-- Ignoring Files and Folders:
+		https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#ignoring-files-and-folders -->
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/languages/*</exclude-pattern>
+
+	<exclude-pattern>*\.(css|js)</exclude-pattern>
+
+	<!-- For CI, don't fail on warnings -->
+	<config name="ignore_warnings_on_exit" value="1"/>
+
+	<!-- How to scan -->
+	<arg value="sp"/> <!-- Show sniff and progress -->
+	<arg name="colors"/> <!-- Show results with colors. Disable if working on Windows -->
+	<arg name="parallel" value="20"/> <!-- Enables parallel processing when available for faster results -->
+
+	<!-- Cache the results between runs. -->
+	<arg name="cache" value="./phpcs.cache"/>
+
+	<!-- Use the WordPress ruleset, with some customizations. -->
+	<rule ref="WordPress">
+		<!-- Allow short array syntax. -->
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+
+		<!-- Allow short ternary expressions -->
+		<exclude name="Universal.Operators.DisallowShortTernary"/>
+
+		<!-- Allow our file naming conventions -->
+		<exclude name="WordPress.Files.FileName"/>
+
+		<!-- Allow inline comments to end without full-stop -->
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+	</rule>
+
+	<!-- Check for PHP cross-version compatibility. -->
+	<!--
+	For more information, also see:
+	https://github.com/PHPCompatibility/PHPCompatibilityWP
+	https://github.com/PHPCompatibility/PHPCompatibility
+	-->
+	<config name="testVersion" value="8.0-"/>
+	<rule ref="PHPCompatibilityWP">
+		<include-pattern>*\.php</include-pattern>
+	</rule>
+
+	<!-- Generic -->
+	<rule ref="Generic.Metrics.CyclomaticComplexity">
+		<properties>
+			<property name="absoluteComplexity" value="50"/>
+		</properties>
+	</rule>
+	<rule ref="Generic.NamingConventions.ConstructorName"/>
+	<rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
+	<rule ref="Generic.PHP.LowerCaseConstant"/>
+	<rule ref="Generic.VersionControl.GitMergeConflict"/>
+	<rule ref="Squiz.Classes.LowercaseClassKeywords"/>
+	<rule ref="Squiz.PHP.CommentedOutCode">
+		<properties>
+			<property name="maxPercentage" value="45"/>
+		</properties>
+	</rule>
+	<rule ref="Squiz.PHP.Eval"/>
+	<rule ref="Squiz.PHP.InnerFunctions"/>
+	<rule ref="Squiz.PHP.LowercasePHPFunctions"/>
+	<rule ref="Squiz.PHP.NonExecutableCode"/>
+	<rule ref="Squiz.Scope.MemberVarScope"/>
+	<rule ref="Squiz.Scope.StaticThisUsage"/>
+
+	<!-- Encourage having only one class/interface/trait per file. -->
+	<rule ref="Generic.Files.OneObjectStructurePerFile">
+		<type>error</type>
+	</rule>
+
+	<!-- Increase severity of debug code -->
+	<rule ref="WordPress.PHP.DevelopmentFunctions">
+		<type>error</type>
+	</rule>
+
+	!-- Include WordPress VIP Coding Standards, with some exclusions and customisations. -->
+	<rule ref="WordPress-VIP-Go">
+		<!-- Exclude VIP-specific filesystem sniffs by default. -->
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_flock"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputcsv"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputs"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fwrite"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_ftruncate"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_is_writable"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_is_writeable"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_link"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_rename"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_symlink"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_tempnam"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_touch"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_touch"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_touch"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_touch"/>
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_touch"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.file_system_operations_fopen"/>
+	</rule>
+
+	<!-- VIP Uncached warnings -->
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.attachment_url_to_postid_attachment_url_to_postid">
+		<type>warning</type>
+		<message>%s() is uncached, please consider adding caching.</message>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.get_page_by_title_get_page_by_title">
+		<type>warning</type>
+		<message>%s() is uncached, please consider adding caching.</message>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.get_posts_get_children">
+		<type>warning</type>
+		<severity>3</severity>
+		<message>%s() is uncached and performs a no limit query. Please use get_posts or WP_Query instead. Please see: https://docs.wpvip.com/technical-references/caching/uncached-functions/</message>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.url_to_postid_url_to_postid">
+		<type>warning</type>
+		<message>%s() is uncached, please consider adding caching.</message>
+	</rule>
+
+	<!-- Update warnings about fetching remove data without wpcom_vip_file_get_contents(). -->
+	<rule ref="WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown">
+		<message>%s() is uncached. If the function is being used to fetch a remote file (e.g. a URL starting with https://), please consider adding caching to improve performance.</message>
+	</rule>
+
+	<!-- Consider creating a combined index on meta_key, meta_value-->
+	<rule ref="WordPress.DB.SlowDBQuery.slow_db_query_meta_key">
+		<severity>3</severity>
+	</rule>
+
+	<!-- VIP recommends other functions -->
+	<rule ref="WordPress.WP.AlternativeFunctions.curl_curl_init">
+		<message>Using cURL functions directly is highly discouraged. Please see: https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.</message>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.curl_curl_close">
+		<message>Using cURL functions directly is highly discouraged. Please see: https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.</message>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.curl_curl_getinfo">
+		<message>Using cURL functions directly is highly discouraged . Please see: https://docs.wpvip.com/technical-references/code-quality-and-best-practices/retrieving-remote-data/.</message>
+	</rule>
+
+</ruleset>

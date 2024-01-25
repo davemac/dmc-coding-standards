@@ -1,0 +1,29 @@
+{
+	"name": "dmcweb/coding-standards",
+	"description": "DMC Web PHPCS Coding Standards",
+	"type": "phpcodesniffer-standard",
+	"license": "MIT",
+	"require": {
+		"dealerdirect/phpcodesniffer-composer-installer": "*",
+		"phpcompatibility/phpcompatibility-wp": "*",
+		"squizlabs/php_codesniffer": "*",
+		"wp-coding-standards/wpcs": "^3",
+		"automattic/vipwpcs": "^3.0"
+	},
+	"prefer-stable": true,
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"config-cs": [
+			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run",
+			"\"vendor/bin/phpcs\" --config-set default_standard WordPress-Extra"
+		],
+		"post-install-cmd": "@config-cs",
+		"post-update-cmd": "@config-cs",
+		"lint": "\"vendor/bin/phpcs\" . ",
+		"phpcs": "\"vendor/bin/phpcs\" --standard=phpcs.xml.dist ."
+	}
+}
