@@ -11,7 +11,6 @@ You will need to manually add this to your project's composer.json file as part 
 
 ```bash
 composer install
-composer config-cs
 ```
 
 ## Using PHPCS
@@ -25,29 +24,16 @@ vendor/bin/phpcs --standard=DMC .
 vendor/bin/phpcs --standard=phpcs.xml .
 ```
 
-Alternatively, you can set this as a composer script, which will automatically reference the correct version of `phpcs` and the dependent standards.
-
-```json
-"scripts": {
-    "phpcs" : "vendor/bin/phpcs --standard=phpcs.xml ."
-}
-```
-
-Then use the following command:
+Alternatively, you can run this a composer script, which will automatically reference the correct version of `phpcs` and the dependent standards.
 
 ```bash
-composer run phpcs
-```
-
-You can also pass arguments to the composer phpcs script, following a `--` operator like this:
-
-```bash
-composer run phpcs -- --report=summary
+composer lint
+composer phpcs
 ```
 
 ## Extending the ruleset
 
-You can create a custom ruleset for your project that extends or customizes these rules by creating your own `phpcs.xml` or `phpcs.xml.dist` file in your project, which references these rules, like this:
+You can create a custom ruleset for your project that extends or customizes these rules by creating your own `phpcs.xml` file in your project, which references these rules, like this:
 
 ```xml
 <?xml version="1.0"?>
@@ -60,8 +46,8 @@ You can create a custom ruleset for your project that extends or customizes thes
   <!-- Set a minimum PHP version for PHPCompatibility -->
   <config name="testVersion" value="8.1-" />
 
-  <!-- Include TCC Rules -->
-  <rule ref="TCC" />
+  	<!-- Include DMC Coding Standards -->
+    <rule ref="./coding-standards/ruleset.xml">
 
   <!-- Include WordPress VIP Ruleset -->
   <rule ref="WordPress-VIP-Go" />
@@ -73,7 +59,7 @@ You can create a custom ruleset for your project that extends or customizes thes
 You can also customise the rule to exclude elements if they aren't applicable to the project:
 
 ```xml
-<rule ref="TCC">
+<rule ref="./coding-standards/ruleset.xml">
 	<!-- Disable cyclomatic complexity checks -->
 	<exclude name="Generic.Metrics.CyclomaticComplexity" />
 </rule>
