@@ -1,6 +1,6 @@
 {
-	"name": "dmcweb/coding-standards",
-	"description": "DMC Web PHPCS Coding Standards",
+	"name": "davemac/dmc-coding-standards",
+	"description": "DMC Web Coding Standards",
 	"type": "phpcodesniffer-standard",
 	"license": "MIT",
 	"require": {
@@ -19,11 +19,11 @@
 	"scripts": {
 		"config-cs": [
 			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run",
-			"\"vendor/bin/phpcs\" --config-set default_standard WordPress-Extra"
+			"\"vendor/bin/phpcs\" --config-set default_standard DMC"
 		],
 		"post-install-cmd": "@config-cs",
 		"post-update-cmd": "@config-cs",
 		"lint": "\"vendor/bin/phpcs\" . ",
-		"phpcs": "\"vendor/bin/phpcs\" --standard=phpcs.xml.dist ."
+		"phpcs": "\"vendor/bin/phpcs\" --standard=DMC ."
 	}
 }

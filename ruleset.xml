@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<ruleset name="DMC">
+
+	<description>Proxy to The Code Company coding standards.</description>
+
+	<rule ref="vendor/dmc-coding-standards/DMC/ruleset.xml" />
+
+</ruleset>
